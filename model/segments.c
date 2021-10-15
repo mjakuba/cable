@@ -214,6 +214,7 @@ ProcessSpools(Problem *p, Node *node, int num_nodes,
                prev_speed = EvalCode(seg [i] -> bottom_pay.expr, 
                                      seg[i] -> first_active, prev_t, T,
                                      0, 0, 0, OLDNODEDATA);
+	       prev_speed = T > 1.0 ? 1.1 : 0.0; // @@@ hard coded!
             }
             else 
                prev_speed = seg [i] -> bottom_pay.value;
@@ -226,6 +227,11 @@ ProcessSpools(Problem *p, Node *node, int num_nodes,
             speed = EvalCode(seg[i] -> bottom_pay.expr, 
                              seg[i] -> first_active, t, T, 
                              0, 0, 0, CURRNODEDATA);
+	    // Above not working for some reason when material type=nonlinear
+	    // Hard code
+	    speed = T > 1.0 ? 1.1 : 0.0; // @@@ hard coded!
+	    printf("e = %f\n",seg [i] -> first_active -> Y[1]);
+	    
          }
          else  {
             T = Tension(seg [i] -> first_active -> Y[1], seg [i] -> material);
@@ -429,6 +435,9 @@ ProcessSpools(Problem *p, Node *node, int num_nodes,
                prev_speed = EvalCode(seg [i] -> top_pay.expr, 
                                      seg[i] -> last_active, prev_t, T,
                                      0, 0, 0, OLDNODEDATA);
+
+	       /// @@@ should hard-coded tension stuff be in here too?  probably yes.
+	       prev_speed = T > 1.0 ? 1.1 : 0.0; // @@@ hard coded!
             }
             else 
                prev_speed = seg [i] -> top_pay.value;
@@ -442,6 +451,12 @@ ProcessSpools(Problem *p, Node *node, int num_nodes,
                              seg[i] -> last_active, t, T, 
                              0, 0, 0, CURRNODEDATA);
                 // seg[i] -> last_active -> Y[u_idx], 0.0, 0.0, 0.0, 0.0);
+
+	    // Above not working for some reason when material type=nonlinear
+	    // Hard code
+	    speed = T > 1.0 ? 1.1 : 0.0; // @@@ hard coded!
+	    printf("e = %f\n",seg [i] -> last_active -> Y[1]);
+	    
             printf("t = %g, T_top = %g, payspeed = %g\n", t, T, speed);
          }
          else  {

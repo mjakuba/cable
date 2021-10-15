@@ -278,6 +278,11 @@ int InitialGuess (solve, n, np)
       CatenaryForces(w0, EA, length, xc2 - xc1, hdist, &hforst, &xforst);
       yforst = hforst*(yc2 - yc1)/hdist;
       zforst = hforst*(zc2 - zc1)/hdist;
+
+      printf("xc1: %f xc2: %f yc1:%f yc2:%f zc1:%f zc2:%f hdist:%f yforst:%f zforst:%f length:%f EA:%f\n",
+	     xc1,xc2,yc1,yc2,zc1,zc2,hdist,yforst,zforst,length,EA); // @@@ MVJ
+
+      
       break;
 
    case Webster:
@@ -471,6 +476,11 @@ int InitialGuess (solve, n, np)
    problem -> terminal [2] -> yforce = yforst;
    problem -> terminal [2] -> zforce = zforst;
 
+   printf("xforst: %f\n",xforst); // @@@ MVJ
+   printf("yforst: %f\n",yforst); // @@@ MVJ
+   printf("zforst: %f\n",zforst); // @@@ MVJ
+   yforst = 0.1;
+   
    hforst = sqrt(yforst*yforst + zforst*zforst);
 
    if (hforst == 0.0) {

@@ -633,6 +633,30 @@ void DynamicDifeq3D (
          s [4][6] = 1.0;
          s [4][rhs] = w;
       }
+	/* 
+	 * @@@ specified velocity (ROV maneuvering most likely)
+	 */
+	/* @@@ MVJ this is just cut an pasted in here and not right and nor will it compile, just placeholder in case I get to fixing this.  prescribed motion of rov not supported in 3d towing problems.
+      else if (problem -> type == Towing && 
+               ((problem -> terminal [1] -> xspeed.value || 
+                 problem -> terminal [1] -> xspeed.expr) ||
+                (problem -> terminal [1] -> yspeed.value ||
+                 problem -> terminal [1] -> yspeed.expr))) {
+
+	cphk = cos(phi);
+	sphk = sin(phi);
+
+         Speed (tm, problem -> terminal [1], &Uspd, &Vspd, NULL);
+
+         s [2][3]   = 1.0;
+         s [2][5]   = Uspd*sphk - Vspd*cphk;
+         s [2][rhs] = u - Uspd*cphk - Vspd*sphk;
+
+         s [3][4]   = 1.0;
+         s [3][5]   = Uspd*cphk + Vspd*sphk;
+         s [3][rhs] = v + Uspd*sphk - Vspd*cphk;
+      }
+	*/
       else {
          if (problem -> type == Deployment) {
             a = problem -> terminal [1] -> anchor;
@@ -693,7 +717,7 @@ void DynamicDifeq3D (
          Vr   = V - vack - Vw;
          Wr   = W - wack - Ww;
 
-         if (problem -> type == HorizontalDrifter) {
+         if (problem -> type == HorizontalDrifter) {  // @@@@ mvj what is this block?.  disabling it makes things worse.
             s [2][4]  = dXdt(B0,B1,B2,B3);
             s [2][5]  = dXdn(B0,B1,B2,B3);
             s [2][6]  = dXdb(B0,B1,B2,B3);
@@ -938,7 +962,7 @@ void DynamicDifeq3D (
          Wr   = W - wack - Ww;
 
          ftr = bmma/dt + 2.0*bdr*sign(Ur)*Ur;
-         if (problem -> type == HorizontalDrifter) {
+         if (problem -> type == HorizontalDrifter) { // @@@ MVJ and what is this block??  disabling it makes things worse.
             s [2][4]  = dXdt(B0,B1,B2,B3);
             s [2][5]  = dXdn(B0,B1,B2,B3);
             s [2][6]  = dXdb(B0,B1,B2,B3);
