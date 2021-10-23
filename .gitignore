@@ -1,0 +1,9 @@
+*.o
+*.a
+parser.c
+parser.h
+parser.output
+lexer.c
+cable
+res2mat
+res2asc

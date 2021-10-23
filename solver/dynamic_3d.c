@@ -832,7 +832,7 @@ void DynamicDifeq3D (
          s [4][6]    = 1.0;
          s [4][rhs]  = w;
       }
-      else if (problem -> type == Towing) {
+      else if (1 || problem -> type == Towing) { // @@@@@ force application of speed to second terminal
 
          Speed (tm, problem -> terminal [2], &Uspd, &Vspd, &Wspd);
          InputVelocity (tm, n -> x, n -> y, n -> z, &Uw, &Vw, &Ww);
@@ -1036,7 +1036,7 @@ void DynamicDifeq3D (
          Uw += Uspd;
          Vw += Vspd;
          Ww += Wspd;
-         fprintf(stderr,"Uw = %g, Vw = %g, Ww =%g\n", Uw, Vw, Ww);
+         //fprintf(stderr,"Uw = %g, Vw = %g, Ww =%g\n", Uw, Vw, Ww);
 
          s [2][4]  = -dXdt(B0,B1,B2,B3);
          s [2][5]  = -dXdn(B0,B1,B2,B3);
