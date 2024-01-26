@@ -215,7 +215,9 @@ ProcessSpools(Problem *p, Node *node, int num_nodes,
                                      seg[i] -> first_active, prev_t, T,
                                      0, 0, 0, OLDNODEDATA);
 	       //prev_speed = T > 1.0 ? 1.1 : 0.0; // @@@ hard coded!
-	       prev_speed = T > 1.0 ? 2.0 : 0.0; // @@@ hard coded!
+	       //prev_speed = T > 1.0 ? 2.0 : 0.0; // @@@ hard coded!
+	       prev_speed = T > 1.0 ? 2.0 : 0.0; // 
+	       //prev_speed = T < 5.0 ? -2.0 : T < 10.0 ? 0.0 : 2.0; // testing retracting spool
             }
             else 
                prev_speed = seg [i] -> bottom_pay.value;
@@ -231,7 +233,10 @@ ProcessSpools(Problem *p, Node *node, int num_nodes,
 	    // Above not working for some reason when material type=nonlinear
 	    // Hard code
 	    //speed = T > 1.0 ? 1.1 : 0.0; // @@@ hard coded!
-	    speed = T > 1.0 ? 2.0 : 0.0; // @@@ hard coded!
+	    //speed = T > 1.0 ? 2.0 : 0.0; // @@@ hard coded!
+	    speed = T > 1.0 ? 2.0 : 0.0; // 
+	    //speed = T < 5.0 ? -2.0 : T < 10.0 ? 0.0 : 2.0; // testing retracting spool
+	    
 	    printf("e = %f\n",seg [i] -> first_active -> Y[1]);
 
 	    // @@@ not sure what next line is printing.  z doesn't seem to line up with output when plotted.
@@ -442,9 +447,12 @@ ProcessSpools(Problem *p, Node *node, int num_nodes,
                                      seg[i] -> last_active, prev_t, T,
                                      0, 0, 0, OLDNODEDATA);
 
+	       // Below hard coded values used for fiberiver
 	       /// @@@ should hard-coded tension stuff be in here too?  probably yes.
 	       //prev_speed = T > 1.0 ? 1.1 : 0.0; // @@@ hard coded!
-	       prev_speed = T > 1.0 ? 2.0 : 0.0; // @@@ hard coded!
+	       //prev_speed = T > 1.0 ? 2.0 : 0.0; // @@@ hard coded!
+	       //prev_speed = T > 1000.0 ? 2.0 : 0.0; // testing increasing payout tension, 5;10;50;100 
+	       prev_speed = T < 5.0 ? -2.0 : T < 10.0 ? 0.0 : 2.0; // testing retracting spool
             }
             else 
                prev_speed = seg [i] -> top_pay.value;
@@ -459,10 +467,13 @@ ProcessSpools(Problem *p, Node *node, int num_nodes,
                              0, 0, 0, CURRNODEDATA);
                 // seg[i] -> last_active -> Y[u_idx], 0.0, 0.0, 0.0, 0.0);
 
+	    // Below hard coded values used for fiberiver
 	    // Above not working for some reason when material type=nonlinear
 	    // Hard code
 	    //speed = T > 1.0 ? 1.1 : 0.0; // @@@ hard coded!
-	    speed = T > 1.0 ? 2.0 : 0.0; // @@@ hard coded!
+	    //speed = T > 1.0 ? 2.0 : 0.0; // @@@ hard coded!
+	    //speed = T > 1000.0 ? 2.0 : 0.0; // testing increasing payout tension, 5;10;50;100 
+	    speed = T < 5.0 ? -2.0 : T < 10.0 ? 0.0 : 2.0; // testing retracting spool
 	    printf("e = %f\n",seg [i] -> last_active -> Y[1]);
 	    
             printf("t = %g, T_top = %g, payspeed = %g\n", t, T, speed);
