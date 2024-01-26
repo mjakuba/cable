@@ -633,30 +633,34 @@ void DynamicDifeq3D (
          s [4][6] = 1.0;
          s [4][rhs] = w;
       }
-	/* 
-	 * @@@ specified velocity (ROV maneuvering most likely)
-	 */
-	/* @@@ MVJ this is just cut an pasted in here and not right and nor will it compile, just placeholder in case I get to fixing this.  prescribed motion of rov not supported in 3d towing problems.
-      else if (problem -> type == Towing && 
-               ((problem -> terminal [1] -> xspeed.value || 
-                 problem -> terminal [1] -> xspeed.expr) ||
-                (problem -> terminal [1] -> yspeed.value ||
-                 problem -> terminal [1] -> yspeed.expr))) {
+      else if (1 || problem -> type == Towing) {
 
-	cphk = cos(phi);
-	sphk = sin(phi);
+	// 2023-01-20 AJD: section added to force movement at first terminal.
+	//Works for towing. Other problem types not tested
+         Speed (tm, problem -> terminal [1], &Uspd, &Vspd, &Wspd);
+  	  
+	 s [2][4]   = 1.0;
+         s [2][7]   = -dtdB0(Uspd,Vspd,Wspd,B0,B1,B2,B3);
+         s [2][8]   = -dtdB1(Uspd,Vspd,Wspd,B0,B1,B2,B3);
+         s [2][9]   = -dtdB2(Uspd,Vspd,Wspd,B0,B1,B2,B3);
+         s [2][10]   = -dtdB3(Uspd,Vspd,Wspd,B0,B1,B2,B3);
+         s [2][rhs] = u - tComponent(Uspd,Vspd,Wspd,B0,B1,B2,B3);
+	 
+         s [3][5]   = 1.0;
+         s [3][7]   = -dndB0(Uspd,Vspd,Wspd,B0,B1,B2,B3);
+         s [3][8]   = -dndB1(Uspd,Vspd,Wspd,B0,B1,B2,B3);
+         s [3][9]   = -dndB2(Uspd,Vspd,Wspd,B0,B1,B2,B3);
+         s [3][10]   = -dndB3(Uspd,Vspd,Wspd,B0,B1,B2,B3);
+         s [3][rhs] = v - nComponent(Uspd,Vspd,Wspd,B0,B1,B2,B3);
 
-         Speed (tm, problem -> terminal [1], &Uspd, &Vspd, NULL);
-
-         s [2][3]   = 1.0;
-         s [2][5]   = Uspd*sphk - Vspd*cphk;
-         s [2][rhs] = u - Uspd*cphk - Vspd*sphk;
-
-         s [3][4]   = 1.0;
-         s [3][5]   = Uspd*cphk + Vspd*sphk;
-         s [3][rhs] = v + Uspd*sphk - Vspd*cphk;
-      }
-	*/
+         s [4][6]   = 1.0;
+         s [4][7]   = -dbdB0(Uspd,Vspd,Wspd,B0,B1,B2,B3);
+         s [4][8]   = -dbdB1(Uspd,Vspd,Wspd,B0,B1,B2,B3);
+         s [4][9]   = -dbdB2(Uspd,Vspd,Wspd,B0,B1,B2,B3);
+         s [4][10]   = -dbdB3(Uspd,Vspd,Wspd,B0,B1,B2,B3);
+         s [4][rhs] = w - bComponent(Uspd,Vspd,Wspd,B0,B1,B2,B3);	 
+	 
+	 }      
       else {
          if (problem -> type == Deployment) {
             a = problem -> terminal [1] -> anchor;
